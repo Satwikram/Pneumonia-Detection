@@ -7,7 +7,7 @@ from tensorflow import keras
 import cv2
 
 # Create your views here.
-from detect.models import PneumoniaPredict
+from detect.models import PneumoniaPredict, ImageSorce
 
 def Home(request):
     return render(request, 'index.html')
@@ -25,7 +25,7 @@ def predict(request):
 
             mediapath = folder + "{}"
             filepath = os.path.join(mediapath).format(name)
-            print(filepath)
+            print("File path:",filepath)
 
             # Loading the model
             model = tf.keras.models.load_model('models\pneumonia.h5')
@@ -43,6 +43,11 @@ def predict(request):
             print("prediction is:",result)
 
             pn = PneumoniaPredict()
+            im = ImageSorce()
+
+            im.img = filepath
+
+            img_source = im
 
             pn.img_path = filepath
             pn.prediction = result
@@ -53,7 +58,7 @@ def predict(request):
             else:
                 messages.info(request,"The patient condition is: Normal")
 
-            return render(request, 'results.html')
+            return render(request, 'results.html', {'img_source': img_source})
 
         except Exception as e:
             print("The Error is:",e)
