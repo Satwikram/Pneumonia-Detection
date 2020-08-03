@@ -5,6 +5,9 @@
 templates
 static
 media
+secret.py
+migrations
+model
 
 
 # Byte-compiled / optimized / DLL files
