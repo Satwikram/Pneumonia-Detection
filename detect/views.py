@@ -9,12 +9,14 @@ import cv2
 # Create your views here.
 from detect.models import PneumoniaPredict
 
+def Home(request):
+    return render(request, 'index.html')
 
 def predict(request):
     if request.method == 'POST':
         try:
             folder = 'media/images/'
-            image = request.FILEs['cd']
+            image = request.FILES['cd']
             print("The name of the file:", image.name)
 
             filename = str(image.name)
@@ -23,6 +25,7 @@ def predict(request):
 
             mediapath = folder + "{}"
             filepath = os.path.join(mediapath).format(name)
+            print(filepath)
 
             # Loading the model
             model = tf.keras.models.load_model('models\pneumonia.h5')
@@ -30,14 +33,14 @@ def predict(request):
             img_size = 300
             img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
             new_array = cv2.resize(img_array, (img_size, img_size))
-            new_array.reshape(-1, img_size, img_size, 1)
+            new_array = new_array.reshape(-1, img_size, img_size, 1)
 
             Labels = ['pneumonia', 'normal']
 
             prediction = model.predict([new_array])
 
             result = Labels[int(prediction[0][0])]
-            print(result)
+            print("prediction is:",result)
 
             pn = PneumoniaPredict()
 
@@ -57,3 +60,6 @@ def predict(request):
 
     else:
         return render(request, 'index.html')
+
+def result(request):
+    return render(request, 'results.html')
