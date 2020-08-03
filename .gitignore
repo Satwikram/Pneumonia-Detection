@@ -7,7 +7,7 @@ static
 media
 secret.py
 migrations
-model
+models
 
 
 # Byte-compiled / optimized / DLL files
